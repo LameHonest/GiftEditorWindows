@@ -3,6 +3,7 @@
 #include <iostream>
 #include <QString>
 #include <QTextCodec>
+#include <QTextStream>
 
 ControllerParserFile::ControllerParserFile()
 {
@@ -57,6 +58,19 @@ QVector <QString> ControllerParserFile::parseFile(QFile &file) {
    found = false;
    for (int i = 0; i < vectorQuest.count(); i++) {
        QString currentQuest = vectorQuest[i].right(vectorQuest[i].length() - vectorQuest[i].indexOf("{"));
+
+       bool missed = false;
+       QString strMissedWord = vectorQuest[i].right(vectorQuest[i].length() - vectorQuest[i].indexOf("}") - 1);
+       if (strMissedWord.length()>0) {
+       for (int i = 0; i < strMissedWord.length(); i++){
+            if (strMissedWord[i] != ' ') missed = true;
+       }
+       }
+       if (missed) {
+            vectorResult.push_back("Missed Word");
+            parseQuestStr(vectorQuest[i], vectorResult);
+       }
+       else {
        if (!found && checkMatchingSelection(currentQuest)) {
            vectorResult.push_back("Matching Selection");
            parseQuestStr(vectorQuest[i],vectorResult);
@@ -89,6 +103,7 @@ QVector <QString> ControllerParserFile::parseFile(QFile &file) {
        }
        found = false;
        }
+   }
    for (int i = 0; i < vectorResult.count(); i=i+4){
        qDebug() << "Type:" <<vectorResult[i] <<"Title:" << vectorResult[i + 1] << "Text:" << vectorResult[i+2] << "Answers:" << vectorResult[i + 3] << endl;
    }

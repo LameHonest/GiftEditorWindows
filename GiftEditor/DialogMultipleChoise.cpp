@@ -19,6 +19,16 @@ void MultipleChoiseWindow::setUpUi(QStringList data) {
     ui->lineEdit->setText(data[0]);
     ui->lineEdit_2->setText(data[1]);
     for (int i = 2; i < data.count(); i++) {
+        data[i].remove(0,2);
+        if (data[i][0] == "-") {
+            data[i] = data[i].right(data[i].length() - data[i].indexOf("%") - 1);
+            data[i] = "~" + data[i];
+        } else {
+            data[i] = data[i].right(data[i].length() - data[i].indexOf("%") - 1);
+            data[i] = "=" + data[i];
+        }
+    }
+    for (int i = 2; i < data.count(); i++) {
         ui->listWidget->addItem(data[i]);
     }
 }

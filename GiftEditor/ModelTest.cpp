@@ -6,6 +6,44 @@ ModelTest::ModelTest()
 
 }
 
+
+//взвешивание вопросов
+QStringList ModelTest::countAnswers(QStringList qAnswers)
+{
+    int rightCount = 0, wrongCount = 0;
+    for (int i = 0; i < qAnswers.count(); i ++) {
+        if (qAnswers[i][0] == "=") {
+            rightCount++;
+        } else {
+            if (qAnswers[i][0] == "~") {
+                wrongCount++;
+            }
+        }
+    }
+    if (rightCount > 1) {
+        double percange = 0;
+        if (wrongCount>0){
+            percange = 100/static_cast<double>(rightCount);
+        } else {
+            percange = 100/static_cast<double>(qAnswers.count());
+        }
+
+        for (int i = 0; i < qAnswers.count(); i++) {
+             if (qAnswers[i][0] == "=") {
+                 qAnswers[i].remove(0,1);
+                 qAnswers[i] = "~%" + QString::number(percange) + "%" + qAnswers[i];
+             } else {
+                 if (qAnswers[i][0] == "~") {
+                     qAnswers[i].remove(0,1);
+                     qAnswers[i] = "~%-" + QString::number(percange) + "%" + qAnswers[i];
+                 }
+             }
+        }
+    }
+    return qAnswers;
+}
+
+
 void ModelTest::eraseQuestAt(int index) {
     vectorQuest.erase(vectorQuest.begin() + index);
 }
@@ -124,7 +162,7 @@ void ModelTest::setUpTest(QString qTitle, QString qText, Test *question, questTy
 void ModelTest::addMultipleChoiseQuest(QString qTitle, QString qText, QStringList qAnswers) {
      Test* question = new Test();
      QuestMultipleChoise *newMultipleChoise = new QuestMultipleChoise();
-     newMultipleChoise->answers = qAnswers;
+     newMultipleChoise->answers = countAnswers(qAnswers);
      question = static_cast<Test*>(newMultipleChoise);
      setUpTest(qTitle, qText, question, MultipleChoise);
 }

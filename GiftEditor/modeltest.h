@@ -55,6 +55,7 @@ public:
 
 //Конец модели вопросов
 //Методы:
+    QStringList countAnswers(QStringList qAnswers);
     QStringList requestData();
     void attachData(QStringList);
 

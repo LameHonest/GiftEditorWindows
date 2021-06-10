@@ -173,7 +173,7 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item){
 void MainWindow::on_action_triggered()
 {
     //QString fileName = QFileDialog::getSaveFileName(this,"Save as", "Test", tr("Gift (*.gift *.GIFT *.txt)"));
-    QString fileName = QFileDialog::getSaveFileName(this,"Save as", "Test", tr("Gift (*.txt)"));
+    QString fileName = QFileDialog::getSaveFileName(this,"Save as", "Test", tr("Gift (*.GIFT)"));
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)){
         QMessageBox::warning(this, "Warning", "Cannot save file : " + file.errorString());
